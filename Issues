@@ -1,0 +1,17 @@
+# Added ssh to EC2 instance to debug the issue.
+
+# PHP version is 7.2.34
+So all the commands starting with  mysql needs to be replaced with mysqli coz mysli was deprecated after PHP5 
+
+# rds-write-config.PHP
+1. mysql_select_db ( connection, dbname) requires connection string
+2. command to create table requires change -> there should be no gap between -p and password
+3. Further...after connecting to the database, the program writes the input values to read.conf.php files using fopen() function.
+TO write into the file..it must have write permission, so did
+chmod 666 on read.conf.php file
+
+# rds-read-data.php
+1. Change mysql to mysqli
+2. Save the connection to a variable -->  $conn = mysqli_connect($RDS_URL, $RDS_user, $RDS_pwd) or die(mysqli_error());
+3. Change mysql_select_db(db)  to mysqli_select_db($conn, db)
+4. When edit,delete,retrieving data we need to pass $conn ie. mysqli_query($conn, connection string)
